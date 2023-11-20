@@ -2,24 +2,46 @@
 
 namespace App\Entity;
 
+use Hateoas\Configuration\Annotation as Hateoas;
 use App\Repository\StationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+//use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StationRepository::class)]
+/*
+     * @Hateoas\Relation(
+     *     "up",
+     *    href = @Hateoas\Route(
+     *        "station.get"
+     * ),
+     *  exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
+     * )
+     * * @Hateoas\Relation(
+     *     "self",
+     *   href = @Hateoas\Route(
+     *       "station.get",
+     *      parameters = {"idStation" = "expr(object.getId())"}
+     * ),
+     * exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
+     * )
+     */
 class Station
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getAllStation"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getAllStation"])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getAllStation"])]
     private ?string $gps = null;
 
     #[ORM\OneToMany(mappedBy: 'station', targetEntity: Piste::class, orphanRemoval: true)]
