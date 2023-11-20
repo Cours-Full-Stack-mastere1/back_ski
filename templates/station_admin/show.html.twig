@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Station{% endblock %}
+
+{% block body %}
+    <h1>Station</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ station.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ station.nom }}</td>
+            </tr>
+            <tr>
+                <th>Gps</th>
+                <td>{{ station.gps }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_station_admin_index') }}">back to list</a>
+
+    <a href="{{ path('app_station_admin_edit', {'id': station.id}) }}">edit</a>
+
+    {{ include('station_admin/_delete_form.html.twig') }}
+{% endblock %}

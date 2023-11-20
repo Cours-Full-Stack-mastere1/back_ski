@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\StationRepository;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class StationController extends AbstractController
 {
@@ -48,12 +50,21 @@ class StationController extends AbstractController
     #[Route('/api/station/{idStation}', name: 'station.get', methods: ['GET'])]
     #[ParamConverter("station", options:["id" => "idStation"])]
     public function getStationById(
-        Station $station,
+        Station $station,        
+        int $idStation,
+        TagAwareCacheInterface $cache,
+        StationRepository $repository,
         SerializerInterface $serializer
     ):JsonResponse
-    {
-        $context= SerializationContext::create()->setGroups(["getAllStation"]);
-        $jsonStation = $serializer->serialize($station, 'json', $context);
+    {        
+        $idCache = "getStation".$station->getId();
+        $jsonStation = $cache->get($idCache, function(ItemInterface $item) use ($repository, $serializer, $idStation){
+            //$serializer->serialize($station, 'json', $context);
+            $item->tag("stationTag");
+            $station = $repository->find($idStation);
+            $context= SerializationContext::create()->setGroups(["getAllStation"]);
+            return $serializer->serialize($station, 'json', $context);
+        });
         return new JsonResponse($jsonStation, Response::HTTP_OK,[], true);
     }
 

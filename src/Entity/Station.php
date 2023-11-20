@@ -11,11 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StationRepository::class)]
-/*
+/**
      * @Hateoas\Relation(
      *     "up",
      *    href = @Hateoas\Route(
-     *        "station.get"
+     *        "station.getAll"
      * ),
      *  exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
      * )
@@ -27,7 +27,7 @@ use JMS\Serializer\Annotation\Groups;
      * ),
      * exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
      * )
-     */
+     **/
 class Station
 {
     #[ORM\Id]
