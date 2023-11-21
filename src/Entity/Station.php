@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 //use Symfony\Component\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: StationRepository::class)]
 /**
@@ -27,6 +28,29 @@ use JMS\Serializer\Annotation\Groups;
      * ),
      * exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
      * )
+     * @OA\Schema(
+    *     description="Station entity",
+    *     title="Station",
+    *     required={"nom", "gps"},
+    *     @OA\Property(
+    *         property="id",
+    *         type="integer",
+    *         description="id",
+    *         example=1
+    *     ),
+    *     @OA\Property(
+    *         property="nom",
+    *         type="string",
+    *         description="nom",
+    *         example="Les Arcs"
+    *     ),
+    *     @OA\Property(
+    *         property="gps",
+    *         type="string",
+    *         description="gps",
+    *         example="45.5725, 6.7933"
+    *     )
+    * )
      **/
 class Station
 {
@@ -44,7 +68,7 @@ class Station
     #[Groups(["getAllStation"])]
     private ?string $gps = null;
 
-    #[ORM\OneToMany(mappedBy: 'station', targetEntity: Piste::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'station', targetEntity: Piste::class, orphanRemoval: true, /* cascade: ['persist'] */)]
     private Collection $piste;
 
     public function __construct()

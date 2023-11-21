@@ -67,8 +67,7 @@ class AppFixtures extends Fixture
         $piste->setOuvert($this->faker->boolean());
         $piste->setLongeur($this->faker->numberBetween(1, 100));
         $temps=[1,2,3,4,5,6,7,8,9,10];
-        $piste->setTemps($temps);
-        
+        $piste->setTemps($temps);        
 
         //Stations
         $station = new Station();
@@ -77,6 +76,21 @@ class AppFixtures extends Fixture
         $station->addPiste($piste);
         $manager->persist($piste);
         $manager->persist($station);
+
+        $piste2 = new Piste();
+        $piste2->setNom($this->faker->word());
+        $piste2->setCouleur($this->faker->word());
+        $piste2->setOuvert($this->faker->boolean());
+        $piste2->setLongeur($this->faker->numberBetween(1, 100));
+        $temps=[1,2,3,4,5,6,7,8,9,10];
+        $piste2->setTemps($temps);
+
+        $station2 = new Station();
+        $station2->setNom($this->faker->word());
+        $station2->setGps("{$this->faker->latitude()}, {$this->faker->longitude()}");
+        $station2->addPiste($piste2);
+        $manager->persist($piste2);
+        $manager->persist($station2);
 
         $manager->flush();
     }
