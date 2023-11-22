@@ -415,4 +415,130 @@ class StationController extends AbstractController
         return new JsonResponse($jsonPiste, Response::HTTP_CREATED,["Location" => $location], true);
     }
 
+    /**
+     * Supprime une piste d'une station
+     * 
+     * @param Station $station
+     * @param Piste $piste
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     * 
+     * @OA\Delete(
+     *   path="/api/station/{idStation}/piste/{idPiste}",
+     * tags={"Stations"},
+     * summary="Supprime une piste d'une station",
+     * @OA\Parameter(
+     * name="idStation",
+     * in="path",
+     * description="id de la station",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Parameter(
+     * name="idPiste",
+     * in="path",
+     * description="id de la piste",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Response(
+     * response=204,
+     * description="Supprime une piste d'une station",
+     * @OA\JsonContent(ref=@Model(type=Piste::class, groups={"getAllPiste"}))
+     * )
+     * )
+     * 
+     */
+    #[Route("/api/station/{idStation}/piste/{idPiste}", name:"station.piste.delete", methods: ["DELETE"])]
+    #[ParamConverter("station", options:["id" => "idStation"])]
+    #[ParamConverter("piste", options:["id" => "idPiste"])]
+    public function deletePisteFromStation(
+        Station $station,
+        Piste $piste,
+        EntityManagerInterface $entityManager
+    ):JsonResponse
+    {
+        $station->removePiste($piste);
+        $entityManager->remove($piste);
+        $entityManager->flush();
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Met à jour une piste d'une station
+     * 
+     * @param Station $station
+     * @param Piste $piste
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $entityManager
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param StationRepository $repository
+     * @return JsonResponse
+     * 
+     * @OA\Put(
+     *   path="/api/station/{idStation}/piste/{idPiste}",
+     * tags={"Stations"},
+     * summary="Met à jour une piste d'une station",
+     * @OA\Parameter(
+     * name="idStation",
+     * in="path",
+     * description="id de la station",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Parameter(
+     * name="idPiste",
+     * in="path",
+     * description="id de la piste",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\RequestBody(
+     * description="Objet Piste à envoyer",
+     * required=true,
+     * @OA\JsonContent(ref=@Model(type=Piste::class, groups={"getAllPiste"}))
+     * ),
+     * @OA\Response(
+     * response=204,
+     * description="Met à jour une piste d'une station",
+     * @OA\JsonContent(ref=@Model(type=Piste::class, groups={"getAllPiste"}))
+     * )
+     * )
+     * 
+     */
+    #[Route("/api/station/{idStation}/piste/{idPiste}", name:"station.piste.update", methods: ["PUT"])]
+    #[ParamConverter("station", options:["id" => "idStation"])]
+    #[ParamConverter("piste", options:["id" => "idPiste"])]
+    public function updatePisteFromStation(
+        Station $station,
+        Piste $piste,
+        Request $request,
+        SerializerInterface $serializer,
+        EntityManagerInterface $entityManager,
+        UrlGeneratorInterface $urlGenerator,
+        StationRepository $repository
+    ):JsonResponse
+    {
+        $context = DeserializationContext::create()->setAttribute(AbstractNormalizer::OBJECT_TO_POPULATE, $piste);
+        $updatedPiste = $serializer->deserialize($request->getContent(),Piste::class,'json',$context);
+        
+        $content = $request->toArray();
+        /* if(isset($content["idDevolution"])){
+                $idDevolutions = $content["idDevolution"];
+                foreach ($updatedPokedex->getDevolutionId() as $key => $devolutions_Id) {
+                    $updatedPokedex->removeDevolutionId($devolutions_Id);
+                }
+                $relatedEntity = $repository->find($idDevolutions);
+                $updatedPokedex->addDevolutionId($relatedEntity);
+            } */
+        // $updatedPokedex->addDevolutionId($idDevolution);
+
+        $entityManager->persist($updatedPiste);
+        $entityManager->flush();
+        
+        
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+
+    }
 }
