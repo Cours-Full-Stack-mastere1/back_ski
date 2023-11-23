@@ -28,6 +28,9 @@ use OpenApi\Annotations as OA;
      * ),
      * exclusion = @Hateoas\Exclusion(groups = {"getAllStation"})
      * )
+     * 
+     * 
+     * 
      * @OA\Schema(
     *     description="Station entity",
     *     title="Station",

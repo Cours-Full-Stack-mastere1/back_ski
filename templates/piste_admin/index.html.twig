@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Piste index{% endblock %}
+
+{% block body %}
+    <h1>Piste index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Couleur</th>
+                <th>Ouvert</th>
+                <th>Longeur</th>
+                <th>Temps</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for piste in pistes %}
+            <tr>
+                <td>{{ piste.id }}</td>
+                <td>{{ piste.nom }}</td>
+                <td>{{ piste.couleur }}</td>
+                <td>{{ piste.ouvert ? 'Yes' : 'No' }}</td>
+                <td>{{ piste.longeur }}</td>
+                <td>{{ piste.temps ? piste.temps|join(', ') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_piste_admin_show', {'id': piste.id}) }}">show</a>
+                    <a href="{{ path('app_piste_admin_edit', {'id': piste.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_piste_admin_new') }}">Create new</a>
+{% endblock %}

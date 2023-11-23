@@ -11,23 +11,24 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: PisteRepository::class)]
-/*
+/** 
  * @Hateoas\Relation(
  *    "up",
- *   href = @Hateoas\Route(
- *      "piste.getAll"
+ *  href = @Hateoas\Route(
+ * "station.piste",
+ * parameters = {"idStation" = "expr(object.getStation().getId())"}
  * ),
  * exclusion = @Hateoas\Exclusion(groups = {"getAllPiste"})
  * )
  * @Hateoas\Relation(
- *    "self",
- *  href = @Hateoas\Route(
- *     "piste.get",
- *   parameters = {"idPiste" = "expr(object.getId())"}
+ *   "self",
+ * href = @Hateoas\Route(
+ * "station.piste.get",
+ * parameters = {"idStation" = "expr(object.getStation().getId())", "idPiste" = "expr(object.getId())"}
  * ),
  * exclusion = @Hateoas\Exclusion(groups = {"getAllPiste"})
- * )*/
-/**
+ * )
+ * 
  * @OA\Schema(
  *    description="Piste entity",
  *   title="Piste",

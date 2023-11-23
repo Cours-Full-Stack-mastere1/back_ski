@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Piste{% endblock %}
+
+{% block body %}
+    <h1>Piste</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ piste.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ piste.nom }}</td>
+            </tr>
+            <tr>
+                <th>Couleur</th>
+                <td>{{ piste.couleur }}</td>
+            </tr>
+            <tr>
+                <th>Ouvert</th>
+                <td>{{ piste.ouvert ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Longeur</th>
+                <td>{{ piste.longeur }}</td>
+            </tr>
+            <tr>
+                <th>Temps</th>
+                <td>{{ piste.temps ? piste.temps|join(', ') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_piste_admin_index') }}">back to list</a>
+
+    <a href="{{ path('app_piste_admin_edit', {'id': piste.id}) }}">edit</a>
+
+    {{ include('piste_admin/_delete_form.html.twig') }}
+{% endblock %}
