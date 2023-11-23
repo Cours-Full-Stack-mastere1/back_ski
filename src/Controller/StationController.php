@@ -541,4 +541,27 @@ class StationController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
 
     }
+
+    //renvoie si la station est ouverte ou fermée (suivant si les pistes de la station son touvertes ou fermees)
+    //renvoie vrai si ouverte, faux si fermée
+    #[Route("/api/station/{idStation}/isOpened", name:"station.isOpened", methods: ["GET"])]
+    #[ParamConverter("station", options:["id" => "idStation"])]
+    public function isOpened(
+        Station $station,
+        SerializerInterface $serializer
+    ):JsonResponse
+    {
+        $context = SerializationContext::create()->setGroups(["getAllPiste"]);
+        $jsonPiste = $serializer->serialize($station->getPiste()->toArray(), 'json', $context);
+        $pistes = json_decode($jsonPiste);
+        $isOpened = true;
+        foreach ($pistes as $key => $piste) {
+            if($piste->ouvert == false){
+                $isOpened = false;
+            }
+        }
+        //$jsonOpen= $serializer->serialize($isOpened, 'json');
+        $jsonOpen = json_encode(["ouvert" => $isOpened]);
+        return new JsonResponse($jsonOpen, Response::HTTP_OK,[], true);
+    }
 }
