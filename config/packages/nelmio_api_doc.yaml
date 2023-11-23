@@ -2,8 +2,8 @@ nelmio_api_doc:
   models: { use_jms: false }
   documentation:
     info:
-      title: Bien etre
-      description: api bien etre
+      title: Stations Skis
+      description: api Stations Skis
       version: "0"
     components:
       securitySchemes:

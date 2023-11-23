@@ -6,19 +6,51 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * @OA\Schema(
+ *    description="User entity",
+ *  title="User",
+ * required={"username", "password"},
+ * @OA\Property(
+ *   property="id",
+ * type="integer",
+ * description="id",
+ * example=1
+ * ),
+ * @OA\Property(
+ * property="username",
+ * type="string",
+ * description="username",
+ * example="admin"
+ * ),
+ * @OA\Property(
+ * property="password",
+ * type="string",
+ * description="password",
+ * example="admin"
+ * )
+ * )
+ * 
+ * 
+ */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getUser"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["getUser"])]
     private ?string $username = null;
 
     #[ORM\Column]
+    #[Groups(["getUser"])]
     private array $roles = [];
 
     /**

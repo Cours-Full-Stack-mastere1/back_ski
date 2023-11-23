@@ -237,7 +237,7 @@ class StationController extends AbstractController
      * @OA\Delete(
      *   path="/api/station/{idStation}",
      * tags={"Stations"},
-     * summary="Supprime une station",
+     * summary="Supprime une Station",
      * @OA\Parameter(
      *  name="idStation",
      * in="path",
@@ -253,7 +253,7 @@ class StationController extends AbstractController
      * )
      *  
      */
-    #[Route("/api/station/delete/{iDStation}", name:"station.delete", methods: ["DELETE"])]
+    #[Route("/api/station/delete/{idStation}", name:"station.delete", methods: ["DELETE"])]
     #[ParamConverter("station", options:["id" => "idStation"])]
     public function forcDeleteFromStation(
         Station $station, 
@@ -542,8 +542,38 @@ class StationController extends AbstractController
 
     }
 
-    //renvoie si la station est ouverte ou fermée (suivant si les pistes de la station son touvertes ou fermees)
-    //renvoie vrai si ouverte, faux si fermée
+    /**
+     * Renvoie si une station est ouverte
+     * 
+     * @param Station $station
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     * 
+     * @OA\Get(
+     *  path="/api/station/{idStation}/isOpened",
+     * tags={"Stations"},
+     * summary="Renvoie si une station est ouverte",
+     * @OA\Parameter(
+     * name="idStation",
+     * in="path",
+     * description="id de la station",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Renvoie si une station est ouverte",
+     * @OA\JsonContent(
+    *         type="object",
+    *         @OA\Property(
+    *             property="ouvert",
+    *             type="boolean"
+    *         )
+    *     )
+     * )
+     * )
+     * 
+     */
     #[Route("/api/station/{idStation}/isOpened", name:"station.isOpened", methods: ["GET"])]
     #[ParamConverter("station", options:["id" => "idStation"])]
     public function isOpened(
