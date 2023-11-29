@@ -253,7 +253,7 @@ class StationController extends AbstractController
      * )
      *  
      */
-    #[Route("/api/station/delete/{idStation}", name:"station.delete", methods: ["DELETE"])]
+    #[Route("/api/station/{idStation}", name:"station.delete", methods: ["DELETE"])]
     #[ParamConverter("station", options:["id" => "idStation"])]
     public function forcDeleteFromStation(
         Station $station, 
@@ -589,6 +589,9 @@ class StationController extends AbstractController
             if($piste->ouvert == false){
                 $isOpened = false;
             }
+        }
+        if($pistes == []){
+            $isOpened = false;
         }
         //$jsonOpen= $serializer->serialize($isOpened, 'json');
         $jsonOpen = json_encode(["ouvert" => $isOpened]);
