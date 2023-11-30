@@ -65,12 +65,9 @@ use OpenApi\Annotations as OA;
  * ),
  * @OA\Property(
  * property="temps",
- * type="int",
+ * type="integer",
  * description="temps",
- * @OA\Items(
- * type="string",
- * example="10"
- * )
+ * example=50
  * )
  * )
  * )
@@ -100,7 +97,7 @@ class Piste
     #[Groups(["getAllPiste"])]
     private ?int $longeur = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column]
     #[Groups(["getAllPiste"])]
     private ?int $temps = null;
 

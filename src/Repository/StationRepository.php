@@ -52,7 +52,7 @@ class StationRepository extends ServiceEntityRepository
 
         if ($searchTerm !== null) {
             $queryBuilder
-                ->andWhere('s.name LIKE :searchTerm')
+                ->andWhere('s.nom LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . $searchTerm . '%');
         }
 

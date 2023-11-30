@@ -61,6 +61,114 @@ class StationController extends AbstractController
     }
 
     /**
+     * Renvoie toutes les stations dont le nom contient le terme recherché
+     * 
+     * @param Request $request
+     * @param StationRepository $repository
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     * 
+     */
+    /**
+     * @OA\Get(
+     *     path="/api/station/search",
+     *   tags={"Stations"},
+     * summary="Récupère toutes les stations dont le nom contient le terme recherché",
+     * @OA\Parameter(
+     *    name="name",
+     * in="query",
+     * description="nom de la station",
+     * required=true,
+     * @OA\Schema(type="string")
+     * ),
+     * @OA\Response(
+     *   response=200,
+     * description="Renvoie toutes les stations dont le nom contient le terme recherché",
+     * @OA\JsonContent(
+     * type="array",
+     * @OA\Items(ref=@Model(type=Station::class, groups={"getAllStation"}))
+     * )
+     * )
+     * )
+     * 
+     */
+    #[Route('/api/station/search', name: 'station.search', methods: ["GET"])]
+    public function searchStations( 
+        Request $request,
+        StationRepository $repository,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $searchTerm = $request->query->get('name');
+
+        $stations = $repository->searchStationsByName($searchTerm);
+
+        $context = SerializationContext::create()->setGroups(["getAllStation"]);
+        $jsonStations = $serializer->serialize($stations, 'json', $context);
+
+        return new JsonResponse($jsonStations, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     * Renvoie toutes les pistes de la station dont le nom contient le terme recherché
+     * 
+     * @param Station $station
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    /**
+     * @OA\Get(
+     *   path="/api/station/{idStation}/piste/filter",
+     * tags={"Stations"},
+     * summary="Récupère toutes les pistes de la station dont le nom contient le terme recherché",
+     * @OA\Parameter(
+     * name="idStation",
+     * in="path",
+     * description="id de la station",
+     * required=true,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Parameter(
+     * name="name",
+     * in="query",
+     * description="nom de la piste",
+     * required=true,
+     * @OA\Schema(type="string")
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Renvoie toutes les pistes de la station dont le nom contient le terme recherché",
+     * @OA\JsonContent(
+     * type="array",
+     * @OA\Items(ref=@Model(type=Piste::class, groups={"getAllPiste"}))
+     * )
+     * )
+     * )
+     * 
+     */
+    
+    #[Route("/api/station/{idStation}/piste/filter", name:"station.piste.filter", methods: ["GET"])]
+    #[ParamConverter("station", options:["id" => "idStation"])]
+    public function getPisteFromStationWithFilter(
+        Station $station,
+        Request $request,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $filterName = $request->query->get('name');
+
+        // Récupérer les pistes de la station en fonction du filtre sur le nom
+        $filteredPistes = $station->getPiste()->filter(function ($piste) use ($filterName) {
+            return strpos($piste->getNom(), $filterName) !== false;
+        });
+
+        $context = SerializationContext::create()->setGroups(["getAllPiste"]);
+        $jsonPiste = $serializer->serialize($filteredPistes->toArray(), 'json', $context);
+
+        return new JsonResponse($jsonPiste, Response::HTTP_OK, [], true);
+    }
+
+
+    /**
      * Renvoie ma Station par id
      * 
      * @param Station $station
@@ -109,6 +217,8 @@ class StationController extends AbstractController
         });
         return new JsonResponse($jsonStation, Response::HTTP_OK,[], true);
     }
+
+    
 
     /**
      * creer une Station
@@ -596,111 +706,5 @@ class StationController extends AbstractController
         //$jsonOpen= $serializer->serialize($isOpened, 'json');
         $jsonOpen = json_encode(["ouvert" => $isOpened]);
         return new JsonResponse($jsonOpen, Response::HTTP_OK,[], true);
-    }
-
-    /**
-     * Renvoie toutes les stations dont le nom contient le terme recherché
-     * 
-     * @param Request $request
-     * @param StationRepository $repository
-     * @param SerializerInterface $serializer
-     * @return JsonResponse
-     * 
-     */
-    /**
-     * @OA\Get(
-     *    path="/api/station/search",
-     * tags={"Stations"},
-     * summary="Récupère toutes les stations dont le nom contient le terme recherché",
-     * @OA\Parameter(
-     * name="name",
-     * in="query",
-     * description="nom de la station",
-     * required=true,
-     * @OA\Schema(type="string")
-     * ),
-     * @OA\Response(
-     * response=200,
-     * description="Renvoie toutes les stations dont le nom contient le terme recherché",
-     * @OA\JsonContent(
-     * type="array",
-     * @OA\Items(ref=@Model(type=Station::class, groups={"getAllStation"}))
-     * )
-     * )
-     * )
-     * 
-     */
-    #[Route("/api/station/search", name: "station.search", methods: ["GET"])]
-    public function searchStations(
-        Request $request,
-        StationRepository $repository,
-        SerializerInterface $serializer
-    ): JsonResponse {
-        $searchTerm = $request->query->get('name');
-
-        $stations = $repository->searchStationsByName($searchTerm, $isOpen);
-
-        $context = SerializationContext::create()->setGroups(["getAllStation"]);
-        $jsonStations = $serializer->serialize($stations, 'json', $context);
-
-        return new JsonResponse($jsonStations, Response::HTTP_OK, [], true);
-    }
-
-    /**
-     * Renvoie toutes les pistes de la station dont le nom contient le terme recherché
-     * 
-     * @param Station $station
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @return JsonResponse
-     */
-    /**
-     * @OA\Get(
-     *   path="/api/station/{idStation}/piste/filter",
-     * tags={"Stations"},
-     * summary="Récupère toutes les pistes de la station dont le nom contient le terme recherché",
-     * @OA\Parameter(
-     * name="idStation",
-     * in="path",
-     * description="id de la station",
-     * required=true,
-     * @OA\Schema(type="integer")
-     * ),
-     * @OA\Parameter(
-     * name="name",
-     * in="query",
-     * description="nom de la piste",
-     * required=true,
-     * @OA\Schema(type="string")
-     * ),
-     * @OA\Response(
-     * response=200,
-     * description="Renvoie toutes les pistes de la station dont le nom contient le terme recherché",
-     * @OA\JsonContent(
-     * type="array",
-     * @OA\Items(ref=@Model(type=Piste::class, groups={"getAllPiste"}))
-     * )
-     * )
-     * )
-     * 
-     */
-    #[Route("/api/station/{idStation}/piste/filter", name:"station.piste.filter", methods: ["GET"])]
-    #[ParamConverter("station", options:["id" => "idStation"])]
-    public function getPisteFromStationWithFilter(
-        Station $station,
-        Request $request,
-        SerializerInterface $serializer
-    ): JsonResponse {
-        $filterName = $request->query->get('name');
-
-        // Récupérer les pistes de la station en fonction du filtre sur le nom
-        $filteredPistes = $station->getPiste()->filter(function ($piste) use ($filterName) {
-            return strpos($piste->getName(), $filterName) !== false;
-        });
-
-        $context = SerializationContext::create()->setGroups(["getAllPiste"]);
-        $jsonPiste = $serializer->serialize($filteredPistes->toArray(), 'json', $context);
-
-        return new JsonResponse($jsonPiste, Response::HTTP_OK, [], true);
-    }
+    }  
 }

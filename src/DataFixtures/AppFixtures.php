@@ -87,6 +87,7 @@ class AppFixtures extends Fixture
             $piste->setTemps(rand(1, 50));
         }
         $stationDeuxAlpes->addPiste($piste);
+        $manager->persist($piste);
     }
 
     $manager->persist($stationDeuxAlpes);
@@ -118,6 +119,7 @@ class AppFixtures extends Fixture
             $piste->setTemps(rand(1, 50));
         }
         $stationAlpeHuez->addPiste($piste);
+        $manager->persist($piste);
     }
 
     $manager->persist($stationAlpeHuez);
@@ -149,6 +151,7 @@ class AppFixtures extends Fixture
             $piste->setTemps(rand(1, 50));
         }
         $stationChamrousse->addPiste($piste);
+        $manager->persist($piste);
     }
 
     $manager->persist($stationChamrousse);
@@ -175,6 +178,7 @@ class AppFixtures extends Fixture
             $piste->setTemps(rand(1, 50));
         }
         $stationVillardCorrencon->addPiste($piste);
+        $manager->persist($piste);
     }
 
     $manager->persist($stationVillardCorrencon);
@@ -207,6 +211,7 @@ class AppFixtures extends Fixture
             $piste->setTemps(rand(1, 50));
         }
         $stationAutransMeaudre->addPiste($piste);
+        $manager->persist($piste);
     }
 
     $manager->persist($stationAutransMeaudre);
