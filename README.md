@@ -36,6 +36,7 @@ symfony composer install
 ### 3.Configuration de la Base de Données
 
 Configurez vos paramètres de base de données dans le fichier .env pour assurer la connexion à votre base de données MySQL ou tout autre SGBD de votre choix.
+TODO: il faut aussi creer des cles jwt
 
 ### 4.Création de la Base de Données
 ```
@@ -47,3 +48,9 @@ php bin/console doctrine:fixtures:load
 ```
 php bin/console server:run
 ```
+
+## Documentation
+
+Une fois l'application lancée, la documentation est disponible à l'adresse suivante : [lien_vers_la_doc](http://localhost:8000/api/doc).
+
+
