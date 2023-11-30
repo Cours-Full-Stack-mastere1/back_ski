@@ -45,4 +45,17 @@ class StationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function searchStationsByName($searchTerm)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+
+        if ($searchTerm !== null) {
+            $queryBuilder
+                ->andWhere('s.name LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

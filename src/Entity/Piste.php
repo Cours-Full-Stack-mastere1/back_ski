@@ -65,11 +65,11 @@ use OpenApi\Annotations as OA;
  * ),
  * @OA\Property(
  * property="temps",
- * type="array",
+ * type="int",
  * description="temps",
  * @OA\Items(
  * type="string",
- * example="00:10:00"
+ * example="10"
  * )
  * )
  * )
@@ -100,9 +100,9 @@ class Piste
     #[Groups(["getAllPiste"])]
     private ?int $longeur = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
+    #[ORM\Column(type: Types::INTEGER)]
     #[Groups(["getAllPiste"])]
-    private array $temps = [];
+    private ?int $temps = null;
 
     #[ORM\ManyToOne(inversedBy: 'piste'/* , cascade: ['persist'] */)]
     #[ORM\JoinColumn(nullable: false)]
@@ -161,17 +161,18 @@ class Piste
         return $this;
     }
 
-    public function getTemps(): array
+    public function getTemps(): ?int
     {
         return $this->temps;
     }
 
-    public function setTemps(array $temps): static
+    public function setTemps(?int $temps): static
     {
         $this->temps = $temps;
 
         return $this;
     }
+
 
     public function getStation(): ?Station
     {

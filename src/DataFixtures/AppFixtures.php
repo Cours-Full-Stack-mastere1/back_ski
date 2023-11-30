@@ -60,38 +60,157 @@ class AppFixtures extends Fixture
         $manager->persist($adminUser);
         $users[] = $adminUser;
 
-        //Pistes
+        // Les Deux Alpes
+    $stationDeuxAlpes = new Station();
+    $stationDeuxAlpes->setNom("Les Deux Alpes");
+    $stationDeuxAlpes->setGps("45.0014, 6.1231");
+
+    for ($i = 0; $i < 10; $i++) {
         $piste = new Piste();
-        $piste->setNom($this->faker->word());
-        $piste->setCouleur($this->faker->word());
-        $piste->setOuvert($this->faker->boolean());
-        $piste->setLongeur($this->faker->numberBetween(1, 100));
-        $temps=[1,2,3,4,5,6,7,8,9,10];
-        $piste->setTemps($temps);        
+        if ($i < 3) {
+            $piste->setNom("Piste Facile " . ($i + 1));
+            $piste->setCouleur("Verte");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } elseif ($i < 7) {
+            $piste->setNom("Piste Intermédiaire " . ($i - 2));
+            $piste->setCouleur("Bleue");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } else {
+            $piste->setNom("Piste Difficile " . ($i - 6));
+            $piste->setCouleur("Noire");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        }
+        $stationDeuxAlpes->addPiste($piste);
+    }
 
-        //Stations
-        $station = new Station();
-        $station->setNom($this->faker->word());
-        $station->setGps("{$this->faker->latitude()}, {$this->faker->longitude()}");
-        $station->addPiste($piste);
-        $manager->persist($piste);
-        $manager->persist($station);
+    $manager->persist($stationDeuxAlpes);
 
-        $piste2 = new Piste();
-        $piste2->setNom($this->faker->word());
-        $piste2->setCouleur($this->faker->word());
-        $piste2->setOuvert($this->faker->boolean());
-        $piste2->setLongeur($this->faker->numberBetween(1, 100));
-        $temps=[1,2,3,4,5,6,7,8,9,10];
-        $piste2->setTemps($temps);
+    // Alpe d'Huez
+    $stationAlpeHuez = new Station();
+    $stationAlpeHuez->setNom("Alpe d'Huez");
+    $stationAlpeHuez->setGps("45.0931, 6.0698");
 
-        $station2 = new Station();
-        $station2->setNom($this->faker->word());
-        $station2->setGps("{$this->faker->latitude()}, {$this->faker->longitude()}");
-        $station2->addPiste($piste2);
-        $manager->persist($piste2);
-        $manager->persist($station2);
+    for ($i = 0; $i < 10; $i++) {
+        $piste = new Piste();
+        if ($i < 2) {
+            $piste->setNom("Piste Facile " . ($i + 1));
+            $piste->setCouleur("Verte");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } elseif ($i < 7) {
+            $piste->setNom("Piste Intermédiaire " . ($i - 1));
+            $piste->setCouleur("Bleue");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } else {
+            $piste->setNom("Piste Difficile " . ($i - 6));
+            $piste->setCouleur("Noire");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        }
+        $stationAlpeHuez->addPiste($piste);
+    }
 
-        $manager->flush();
+    $manager->persist($stationAlpeHuez);
+
+    // Chamrousse
+    $stationChamrousse = new Station();
+    $stationChamrousse->setNom("Chamrousse");
+    $stationChamrousse->setGps("45.1137, 5.8754");
+
+    for ($i = 0; $i < 10; $i++) {
+        $piste = new Piste();
+        if ($i < 4) {
+            $piste->setNom("Piste Facile " . ($i + 1));
+            $piste->setCouleur("Verte");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } elseif ($i < 7) {
+            $piste->setNom("Piste Intermédiaire " . ($i - 3));
+            $piste->setCouleur("Bleue");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } else {
+            $piste->setNom("Piste Difficile " . ($i - 6));
+            $piste->setCouleur("Noire");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        }
+        $stationChamrousse->addPiste($piste);
+    }
+
+    $manager->persist($stationChamrousse);
+
+
+    // Villard-de-Lans / Corrençon-en-Vercors
+    $stationVillardCorrencon = new Station();
+    $stationVillardCorrencon->setNom("Villard-de-Lans / Corrençon-en-Vercors");
+    $stationVillardCorrencon->setGps("45.0789, 5.5529");
+
+    for ($i = 0; $i < 10; $i++) {
+        $piste = new Piste();
+        if ($i < 6) {
+            $piste->setNom("Piste Facile " . ($i + 1));
+            $piste->setCouleur("Verte");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } else {
+            $piste->setNom("Piste Intermédiaire " . ($i - 5));
+            $piste->setCouleur("Bleue");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        }
+        $stationVillardCorrencon->addPiste($piste);
+    }
+
+    $manager->persist($stationVillardCorrencon);
+
+
+    // Autrans-Méaudre en Vercors
+    $stationAutransMeaudre = new Station();
+    $stationAutransMeaudre->setNom("Autrans-Méaudre en Vercors");
+    $stationAutransMeaudre->setGps("45.1796, 5.5311");
+
+    for ($i = 0; $i < 10; $i++) {
+        $piste = new Piste();
+        if ($i < 3) {
+            $piste->setNom("Piste Facile " . ($i + 1));
+            $piste->setCouleur("Verte");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } elseif ($i < 7) {
+            $piste->setNom("Piste Intermédiaire " . ($i - 2));
+            $piste->setCouleur("Bleue");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        } else {
+            $piste->setNom("Piste Difficile " . ($i - 6));
+            $piste->setCouleur("Noire");
+            $piste->setOuvert(true);
+            $piste->setLongeur(rand(1, 100));
+            $piste->setTemps(rand(1, 50));
+        }
+        $stationAutransMeaudre->addPiste($piste);
+    }
+
+    $manager->persist($stationAutransMeaudre);
+
+    $manager->flush();
     }
 }
