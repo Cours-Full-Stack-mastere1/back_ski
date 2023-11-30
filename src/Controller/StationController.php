@@ -161,9 +161,11 @@ class StationController extends AbstractController
             return strpos($piste->getNom(), $filterName) !== false;
         });
 
-        $context = SerializationContext::create()->setGroups(["getAllPiste"]);
-        $jsonPiste = $serializer->serialize($filteredPistes->toArray(), 'json', $context);
+        $filteredPistes = $filteredPistes->toArray();
 
+        $context = SerializationContext::create()->setGroups(["getAllPiste"]);
+        $jsonPiste = $serializer->serialize($filteredPistes, 'json', $context);
+        $jsonPiste = '['.$jsonPiste.']';
         return new JsonResponse($jsonPiste, Response::HTTP_OK, [], true);
     }
 
