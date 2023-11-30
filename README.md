@@ -26,7 +26,7 @@ Pour mettre en place ce projet sur votre machine locale, suivez ces étapes :
 
 ```
 git clone https://github.com/Cours-Full-Stack-mastere1/back_ski
-cd nom_du_dossier
+cd ./back_ski
 ```
 
 ### 2. Installation des Dépendances
